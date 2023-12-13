@@ -11,9 +11,6 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
-app.get('/', function(req, res) {
-	res.sendFile(__dirname + '/index.html');
-});
 
 const port = process.env.PORT
 
