@@ -19,7 +19,21 @@ const getOrderById = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+const getOrdersByUserId = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        // Lấy danh sách đơn đặt hàng của người dùng theo userId
+        const orders = await Orders.find({ user: userId });
 
+        if (orders.length === 0) {
+            return res.status(404).json({ message: 'Không tìm thấy đơn đặt hàng cho người dùng có id là', userId });
+        }
+
+        res.status(200).json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 const updateOrder = async (req, res) => {
     try {
         const { id } = req.params;
@@ -96,4 +110,4 @@ const createOrder = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-module.exports = { getOrder,getOrderById, updateOrder, deleteOrder, createOrder };
+module.exports = { getOrder,getOrderById, updateOrder,getOrdersByUserId, deleteOrder, createOrder };

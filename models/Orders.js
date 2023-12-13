@@ -12,10 +12,20 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         require: true,
     },
+    items: [{
+      product_id: { type: String, required: true },
+      quantity: { type: Number, required: true },
+      address: { type: String, required: true }
+  }],
+
     products: [{
       product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
       quantity: Number,
     }],
+    userInfo: {
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
+      address: String,
+  },
   },
   {
     timestamps: true

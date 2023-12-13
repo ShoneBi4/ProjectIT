@@ -28,6 +28,9 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => {
     console.error('DB Connection failed:', err.message);
   });
+
+
+  
 app.use('/user',userRoutes)
 app.use('/product',productRoutes)
 app.use('/category', categoryRoutes)

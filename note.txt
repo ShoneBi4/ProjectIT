@@ -6,3 +6,4 @@ npm install mongoose
 npm install -g typescript 
  npm install typescript --save-dev
  npm init 
+ npm install express bcrypt jsonwebtoken body-parser

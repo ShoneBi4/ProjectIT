@@ -19,6 +19,22 @@ const login = async (req, res) => {
  res.json({ token });
 };
 
+const getUserByUsername = async (req, res) => {
+    const { username } = req.params;
+  
+    try {
+      const user = await Users.findOne({ username });
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      res.status(200).json(user);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
+
 const getUsers = async (req, res) => {
     try {
         const users = await Users.find({});
@@ -75,4 +91,4 @@ const createUser = async (req, res) => {
     }
 };
 
-module.exports = { getUsers, getUserById, updateUser, deleteUser, createUser,login };
+module.exports = { getUsers, getUserById,getUserByUsername, updateUser, deleteUser, createUser,login };
