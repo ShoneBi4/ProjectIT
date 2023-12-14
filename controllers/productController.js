@@ -19,22 +19,6 @@ const getProductById = async (req, res) => {
     }
 };
 
-const getProductByName = async (req, res) => {
-    const { productName } = req.params;
-
-    try {
-        // Sử dụng phương thức findOne để tìm sản phẩm dựa trên tên
-        const product = await Products.findOne({ name: productName });
-
-        if (!product) {
-            return res.status(404).json({ message: 'Không tìm thấy sản phẩm có tên là', productName });
-        }
-
-        res.status(200).json(product);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 const getProductsByCategoryName = async (req, res) => {
     const { categoryName } = req.params;
 
@@ -93,4 +77,4 @@ const createProduct = async (req, res) => {
     }
 };
 
-module.exports = { getProducts, getProductById,getProductsByCategoryName,getProductByName, updateProduct, deleteProduct, createProduct };
+module.exports = { getProducts, getProductById,getProductsByCategoryName, updateProduct, deleteProduct, createProduct };

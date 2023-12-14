@@ -8,20 +8,21 @@ const getOrder = async (req, res) => {
             totalValue: 1,
             items: 1,
             userInfo: 1,
-            _id: 1  // Bật trường _id để lấy orderId
+            _id: 1
         })
-            .populate('userInfo.user')  // Populate thông tin người dùng
-            .populate('items.product_id');  // Populate thông tin sản phẩm
+        .populate('userInfo.user')
+        .populate('items.product_id');
 
-        // Chuyển đổi dữ liệu để đạt được định dạng mong muốn
+        console.log('Populated Orders:', orders);
+
         const formattedOrders = orders.map(order => {
             return {
-                orderId: order._id.toString(),  // Thêm orderId vào đối tượng
-                userId: order.userInfo.user._id.toString(),
+                orderId: order._id.toString(),
+                userId: order.userInfo.user ? order.userInfo.user._id.toString() : null,
                 totalValue: order.totalValue,
                 items: order.items.map(item => ({
-                    product_id: item.product_id._id.toString(),
-                    productName: item.product_id.name,
+                    product_id: item.product_id ? item.product_id._id.toString() : null,
+                    productName: item.product_id ? item.product_id.name : null,
                     quantity: item.quantity
                 })),
                 userInfo: {
@@ -111,7 +112,7 @@ const getOrdersByUserId = async (req, res) => {
 const updateOrder = async (req, res) => {
     try {
         const { id } = req.params;
-        const { totalValue, products } = req.body;
+        const { totalValue, address, products } = req.body;
 
         const order = await Orders.findById(id);
         if (!order) {
@@ -124,10 +125,20 @@ const updateOrder = async (req, res) => {
             return res.status(400).json({ message: 'Một hoặc nhiều sản phẩm không hợp lệ.' });
         }
 
-        const updatedOrder = await Orders.findByIdAndUpdate(id, {
-            totalValue,
-            products,
-        }, { new: true }).populate('user').populate('items.product_id');
+        // Cập nhật thông tin đơn đặt hàng
+        order.totalValue = totalValue;
+        order.userInfo.address = address;
+
+        // Cập nhật thông tin từng mục sản phẩm trong đơn đặt hàng
+        order.items.forEach(item => {
+            const matchedProduct = products.find(p => p.product === item.product_id.toString());
+            if (matchedProduct) {
+                item.quantity = matchedProduct.quantity;
+            }
+        });
+
+        // Lưu các thay đổi
+        const updatedOrder = await order.save();
 
         res.status(200).json(updatedOrder);
     } catch (error) {
