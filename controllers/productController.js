@@ -19,14 +19,15 @@ const getProductById = async (req, res) => {
     }
 };
 
-const getProductsByCategoryName = async (req, res) => {
-    const { categoryName } = req.params;
+const getProductsByCategoryId = async (req, res) => {
+    const { categoryId } = req.params;
 
     try {
-        const products = await Products.findByCategoryName(categoryName);
+        // Sử dụng phương thức find để tìm sản phẩm dựa trên categoryId
+        const products = await Products.find({ category: categoryId }); // Chuyển thành { category: categoryId }
 
         if (products.length === 0) {
-            return res.status(404).json({ message: 'No products found for the given category name' });
+            return res.status(404).json({ message: 'No products found for the given category id' });
         }
 
         res.status(200).json(products);
@@ -77,4 +78,4 @@ const createProduct = async (req, res) => {
     }
 };
 
-module.exports = { getProducts, getProductById,getProductsByCategoryName, updateProduct, deleteProduct, createProduct };
+module.exports = { getProducts, getProductById,getProductsByCategoryId, updateProduct, deleteProduct, createProduct };
