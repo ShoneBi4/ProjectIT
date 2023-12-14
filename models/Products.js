@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
-    name: {
+    productName: {
         type: String,
         required: 'Bạn chưa đặt tên sản phẩm',
     },
@@ -11,6 +11,11 @@ const productSchema = new mongoose.Schema({
     },
     price:{
         type: Number,
+        require: true,
+    },
+    
+    image:{
+        type: String,
         require: true,
     },
     category: { 

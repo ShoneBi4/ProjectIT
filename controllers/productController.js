@@ -54,11 +54,16 @@ const getProductsByCategoryName = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await Products.findByIdAndUpdate(id, req.body);
-        if (!product) {
+        const updatedProduct = await Products.findByIdAndUpdate(
+            id,
+            { $set: req.body },
+            { new: true }
+        );
+
+        if (!updatedProduct) {
             return res.status(404).json({ message: 'Không tìm thấy sản phẩm có id là', id });
         }
-        const updatedProduct = await Products.findById(id);
+
         res.status(200).json(updatedProduct);
     } catch (error) {
         res.status(500).json({ message: error.message });

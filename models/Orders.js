@@ -1,35 +1,26 @@
 const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
-    user: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
-    },
-    createdDate: { 
-        type: Date, 
-        default: Date.now },
-    totalValue:{
-        type: Number,
-        require: true,
-    },
-    items: [{
-      product_id: { type: String, required: true },
+  totalValue: {
+    type: Number,
+    required: true,
+  },
+  items: [
+    {
+      product_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Products', required: true },  // Update the reference to 'Products'
+      productName: { type: String, required: true },
       quantity: { type: Number, required: true },
-      address: { type: String, required: true }
-  }],
-
-    products: [{
-      product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-      quantity: Number,
-    }],
-    userInfo: {
-      user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users' },
-      address: String,
+    }
+  ],
+  userInfo: {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', required: true },
+    username: String,
+    address: String,
   },
-  },
-  {
-    timestamps: true
-  });
+},
+ {
+  timestamps: true
+});
 
   // Tạo model từ schema
 const Orders = mongoose.model('Orders', orderSchema);
